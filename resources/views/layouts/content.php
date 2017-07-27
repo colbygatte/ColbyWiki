@@ -7,6 +7,6 @@
     <title>Wiki!</title>
 </head>
 <body>
-
+<?php $renderer->yieldSection('body'); ?>
 </body>
 </html>
