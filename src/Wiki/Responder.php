@@ -2,7 +2,7 @@
 
 namespace Wiki;
 
-use Wiki\Interfaces\ResponseInterface;
+use Wiki\Interfaces\ResponseInterface as Response;
 
 class Responder
 {
@@ -10,7 +10,7 @@ class Responder
     {
     }
     
-    public function send(ResponseInterface $response)
+    public function send(Response $response)
     {
         foreach ($response->getHeaders() as $header) {
             header($header);

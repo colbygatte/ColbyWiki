@@ -2,37 +2,35 @@
 
 namespace Wiki;
 
+use Wiki\Template\TemplateComponentContainer;
+
 /**
  * Class Renderer
- *
- * Renderable pages
- *
- * - Page view
- * - Edit page
- * - Backlinks
- * - Page history
  *
  * @package Wiki
  */
 class Renderer
 {
-    public function viewPage()
-    {
+    /**
+     * @var string
+     */
+    protected $viewsDirectory;
     
+    public function __construct($viewsDirectory)
+    {
+        $this->viewsDirectory = $viewsDirectory;
     }
     
-    public function editPage()
+    public function render($view, $templateVariables)
     {
+        $view = str_replace('.', '/', $view);
     
-    }
+        extract($templateVariables);
     
-    public function backLinks()
-    {
+        ob_start();
     
-    }
-    
-    public function pageHistory()
-    {
-    
+        include $this->viewsDirectory.prepend_slash($view).'.php';
+        
+        return ob_get_clean();
     }
 }

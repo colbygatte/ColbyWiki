@@ -2,6 +2,8 @@
 
 namespace Wiki;
 
+use Wiki\Db\DbPage;
+
 class Db
 {
     protected $directory;
@@ -14,7 +16,7 @@ class Db
     /**
      * @param $page
      *
-     * @return bool|\Wiki\DbPageDirectory
+     * @return bool|\Wiki\Db\DbPage
      */
     public function getPageDirectory($page)
     {
@@ -22,6 +24,6 @@ class Db
             return false; // TODO: Throw error?
         }
         
-        return new DbPageDirectory($this->directory.prepend_slash($page));
+        return new DbPage($this->directory.prepend_slash($page));
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Wiki;
 
-class TokenStyler
+class WikiTextTokenStyler
 {
     public function pageNameThatExists($page, $url)
     {

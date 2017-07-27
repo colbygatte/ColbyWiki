@@ -35,6 +35,11 @@ class Wiki
         return new WikiPage($this->db->getPageDirectory(wiki_name($page)));
     }
     
+    /**
+     * @param string $page Wiki Page name. Will be ran through @see wiki_name()
+     *
+     * @return bool
+     */
     public function pageExists($page)
     {
         return file_exists($this->db->getPageDirectory(wiki_name($page))->path());

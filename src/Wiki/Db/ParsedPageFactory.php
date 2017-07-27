@@ -1,6 +1,8 @@
 <?php
 
-namespace Wiki;
+namespace Wiki\Db;
+
+use Wiki\Parser\ParsedPage;
 
 class ParsedPageFactory
 {

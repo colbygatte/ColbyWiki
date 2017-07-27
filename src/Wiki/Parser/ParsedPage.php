@@ -1,6 +1,6 @@
 <?php
 
-namespace Wiki;
+namespace Wiki\Parser;
 
 class ParsedPage
 {

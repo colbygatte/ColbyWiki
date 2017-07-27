@@ -2,6 +2,8 @@
 
 namespace Wiki;
 
+use Wiki\Db\ParsedPageFactory;
+
 class Parser
 {
     const T_LINK_PAGE_EXISTS = 'LINK_PAGE_EXISTS';
@@ -12,12 +14,12 @@ class Parser
     protected $wiki;
     
     /**
-     * @var \Wiki\ParsedPageFactory
+     * @var \Wiki\Db\ParsedPageFactory
      */
     protected $parsedPageFactory;
     
     /**
-     * @var \Wiki\TokenStyler
+     * @var \Wiki\WikiTextTokenStyler
      */
     protected $tokenStyler;
     
@@ -28,12 +30,12 @@ class Parser
     
     /**
      * @param \Wiki\Wiki $wiki
-     * @param \Wiki\TokenStyler $tokenStyler
+     * @param \Wiki\WikiTextTokenStyler $tokenStyler
      * @param $text
      *
-     * @return \Wiki\ParsedPage
+     * @return \Wiki\Parser\ParsedPage
      */
-    public function parse(Wiki $wiki, TokenStyler $tokenStyler, $text)
+    public function parse(Wiki $wiki, WikiTextTokenStyler $tokenStyler, $text)
     {
         $this->wiki = $wiki;
         $this->tokenStyler = $tokenStyler;
@@ -44,20 +46,20 @@ class Parser
             $text
         );
         
-        return $this->parsedPageFactory->makeParsedPage()->setParsedText($text);
-    
         $this->wiki = null;
         $this->tokenStyler = null;
+        
+        return $this->parsedPageFactory->makeParsedPage()->setParsedText($text);
     }
     
     public function handlePageMatches($matches)
     {
         $page = $matches[1];
         
-        if( $this->wiki->pageExists($page)) {
+        if ($this->wiki->pageExists($page)) {
             return $this->tokenStyler->pageNameThatExists($page, '#');
         }
-    
+        
         return $this->tokenStyler->pageNameThatDoesNotExist($page, '#');
     }
 }

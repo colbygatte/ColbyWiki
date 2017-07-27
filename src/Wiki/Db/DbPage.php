@@ -1,13 +1,13 @@
 <?php
 
-namespace Wiki;
+namespace Wiki\Db;
 
 /**
  * Each page is stored in a directory
  *
  * @package Wiki
  */
-class DbPageDirectory
+class DbPage
 {
     // File names
     const FN_CURRENT = 'current';

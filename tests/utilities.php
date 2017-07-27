@@ -7,7 +7,7 @@ if (! function_exists('dump__')) {
     function dump__()
     {
         if(function_exists('dump')) {
-            dump(func_get_args());
+            dump(...func_get_args());
         } else {
             print_r(func_get_args());
         }

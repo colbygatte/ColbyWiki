@@ -18,6 +18,8 @@ class BasicResponse implements ResponseInterface
     public function setBody($body)
     {
         $this->body = $body;
+        
+        return $this;
     }
     
     public function getBody()

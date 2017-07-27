@@ -12,7 +12,7 @@ use ColbyGatte\Utilities\Traits\DynamicCalls;
  * @method string getDatabaseDirectory()
  * @method setDatabaseDirectory(string $databaseDirectory)
  */
-class Config
+class WikiConfig
 {
     use DynamicCalls;
     

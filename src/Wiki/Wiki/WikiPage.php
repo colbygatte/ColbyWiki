@@ -2,7 +2,7 @@
 
 namespace Wiki\Wiki;
 
-use Wiki\DbPageDirectory;
+use Wiki\Db\DbPage;
 
 /**
  * All information about a WikiPage should be accessed through this class.
@@ -12,18 +12,23 @@ use Wiki\DbPageDirectory;
 class WikiPage
 {
     /**
-     * @var \Wiki\DbPageDirectory
+     * @var \Wiki\Db\DbPage
      */
     protected $pageDb;
     
+    /**
+     * This is the most recent wiki text for the current page
+     *
+     * @var string
+     */
     protected $currentText;
     
     /**
      * WikiPage constructor.
      *
-     * @param \Wiki\DbPageDirectory $pageDb
+     * @param \Wiki\Db\DbPage $pageDb
      */
-    public function __construct(DbPageDirectory $pageDb)
+    public function __construct(DbPage $pageDb)
     {
         $this->pageDb = $pageDb;
     }
@@ -49,10 +54,5 @@ class WikiPage
     public function saveUpdatedText()
     {
         $this->pageDb->updateText($this->currentText);
-    }
-    
-    public function getLatestVersion()
-    {
-        die('not implemented');
     }
 }
