@@ -2,8 +2,6 @@
 
 namespace Wiki;
 
-use Wiki\Template\TemplateComponentContainer;
-
 /**
  * Class Renderer
  *
@@ -71,6 +69,10 @@ class Renderer
     
     public function extend($templateFile)
     {
+        if (isset($this->extendsFile)) {
+            throw new \Exception("A single file cannot extend more than one file");
+        }
+        
         $this->extendsFile = $templateFile;
     }
 }

@@ -12,17 +12,25 @@ abstract class AbstractController
     
     /**
      * @param $action
-     * @param \Wiki\DependencyContainer $controller
+     * @param \Wiki\DependencyContainer $container
      *
      * @return string ACTION_ code
      */
-    public function trigger($action, DependencyContainer $controller)
+    public function trigger($action, DependencyContainer $container)
     {
         if (method_exists($this, $method = 'action'.ucfirst($action))) {
-            return $this->$method($controller);
+            if (($body = $this->$method($container)) !== false) {
+                $container->getResponder()->send(
+                    $container->getResponseFactory()->basicResponse()->setBody($body)
+                );
+                
+                return true;
+            } else {
+                die('error retrieving body from controller');
+            }
         }
         
-        return static::ACTION_NOT_FOUND;
+        die('error handling/error page not implemented');
     }
     
     abstract function actionHome(DependencyContainer $container);

@@ -6,8 +6,15 @@ use Wiki\Interfaces\ResponseInterface;
 
 class RedirectResponse implements ResponseInterface
 {
-    public function __construct($redirect)
+    protected $redirect;
+    
+    public function __construct()
     {
+    }
+    
+    public function setRedirect($redirect)
+    {
+        $this->redirect = $redirect;
     }
     
     /**
@@ -15,7 +22,7 @@ class RedirectResponse implements ResponseInterface
      */
     public function getHeaders()
     {
-    
+        return ["Redirect: {$this->redirect}"];
     }
     
     public function getBody()

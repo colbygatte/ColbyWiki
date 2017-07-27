@@ -6,12 +6,14 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 use Wiki\Actions;
 use Wiki\Controller;
 use Wiki\Db;
-use Wiki\Db\ParsedPageFactory;
 use Wiki\DependencyContainer;
+use Wiki\Logger;
 use Wiki\Parser;
+use Wiki\Parser\ParsedPageFactory;
 use Wiki\Renderer;
 use Wiki\Request;
 use Wiki\Responder;
+use Wiki\Responses\ResponseFactory;
 use Wiki\Wiki;
 use Wiki\WikiTextTokenStyler;
 
@@ -33,18 +35,20 @@ class WikiTestCase extends BaseTestCase
             
             new Responder,
             
+            new ResponseFactory(),
+            
             new Parser(new ParsedPageFactory),
             
             new WikiTextTokenStyler,
             
-            new Controller
+            new Controller,
+            
+            new Logger('WikiLogger')
         );
     }
     
     protected function setUp()
     {
         parent::setUp();
-        
-        $this->makeContainer();
     }
 }

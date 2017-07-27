@@ -2,7 +2,7 @@
 
 namespace Wiki;
 
-use Wiki\Db\ParsedPageFactory;
+use Wiki\Parser\ParsedPageFactory;
 
 class Parser
 {
@@ -14,7 +14,7 @@ class Parser
     protected $wiki;
     
     /**
-     * @var \Wiki\Db\ParsedPageFactory
+     * @var \Wiki\Parser\ParsedPageFactory
      */
     protected $parsedPageFactory;
     

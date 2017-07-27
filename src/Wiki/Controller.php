@@ -8,13 +8,12 @@ class Controller extends AbstractController
 {
     function actionHome(DependencyContainer $container)
     {
+        $mainPage = $container->getWiki()->getPage('MainPage');
         
-        $text = $container->getRenderer()->render('home', ['name' => 'IT WORKED!']);
+        $parsedText = $container->parseText($mainPage->getText());
         
-        $response = (new Responses\BasicResponse)->setBody($text);
-        
-        $container->getResponder()->send($response);
-        
-        return static::ACTION_SUCCESS;
+        return $container->getRenderer()->render('home', [
+            'name' => $parsedText->getParsedText()
+        ]);
     }
 }

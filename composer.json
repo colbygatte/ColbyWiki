@@ -1,7 +1,8 @@
 {
     "name": "colbygatte/colby-wiki",
     "require": {
-        "colbygatte/cg-utilities": "dev-master"
+        "colbygatte/cg-utilities": "dev-master",
+        "monolog/monolog": "^1.23"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.2",
