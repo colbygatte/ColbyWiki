@@ -15,6 +15,8 @@ class RedirectResponse implements ResponseInterface
     public function setRedirect($redirect)
     {
         $this->redirect = $redirect;
+        
+        return $this;
     }
     
     /**
@@ -22,7 +24,7 @@ class RedirectResponse implements ResponseInterface
      */
     public function getHeaders()
     {
-        return ["Redirect: {$this->redirect}"];
+        return ["Location: {$this->redirect}"];
     }
     
     public function getBody()

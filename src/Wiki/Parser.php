@@ -2,9 +2,10 @@
 
 namespace Wiki;
 
-use Wiki\Parser\ParsedPageFactory;
+use Wiki\Extensions\BulmaParsedown;
+use Wiki\Interfaces\ParserInterface;
 
-class Parser
+class Parser extends ParserInterface
 {
     const T_LINK_PAGE_EXISTS = 'LINK_PAGE_EXISTS';
     
@@ -14,19 +15,9 @@ class Parser
     protected $wiki;
     
     /**
-     * @var \Wiki\Parser\ParsedPageFactory
-     */
-    protected $parsedPageFactory;
-    
-    /**
      * @var \Wiki\WikiTextTokenStyler
      */
     protected $tokenStyler;
-    
-    public function __construct(ParsedPageFactory $parsedPageFactory)
-    {
-        $this->parsedPageFactory = $parsedPageFactory;
-    }
     
     /**
      * @param \Wiki\Wiki $wiki
@@ -39,6 +30,10 @@ class Parser
     {
         $this->wiki = $wiki;
         $this->tokenStyler = $tokenStyler;
+        
+        $parsedown = new BulmaParsedown;
+        
+        $text = $parsedown->text($text);
         
         $text = preg_replace_callback(
             '/\[\[(.+?)\]\]/',
@@ -56,10 +51,12 @@ class Parser
     {
         $page = $matches[1];
         
+        $url = http_path('?action=view_page&page='.$page);
+        
         if ($this->wiki->pageExists($page)) {
-            return $this->tokenStyler->pageNameThatExists($page, '#');
+            return $this->tokenStyler->pageNameThatExists($page, $url);
         }
         
-        return $this->tokenStyler->pageNameThatDoesNotExist($page, '#');
+        return $this->tokenStyler->pageNameThatDoesNotExist($page, $url);
     }
 }

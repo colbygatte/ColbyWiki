@@ -1,5 +1,5 @@
 <?php template()->extend('layouts.content'); ?>
 
 <?php template()->start('body'); ?>
-    <?php echo $name; ?>
+<textarea><?php echo $text; ?></textarea>
 <?php template()->end(); ?>

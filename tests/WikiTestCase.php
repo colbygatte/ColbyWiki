@@ -6,11 +6,11 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 use Wiki\Actions;
 use Wiki\Controller;
 use Wiki\Db;
-use Wiki\DependencyContainer;
+use Wiki\Container;
 use Wiki\Logger;
 use Wiki\Parser;
 use Wiki\Parser\ParsedPageFactory;
-use Wiki\Renderer;
+use Wiki\TemplateEngine;
 use Wiki\Request;
 use Wiki\Responder;
 use Wiki\Responses\ResponseFactory;
@@ -20,18 +20,18 @@ use Wiki\WikiTextTokenStyler;
 class WikiTestCase extends BaseTestCase
 {
     /**
-     * @var \Wiki\DependencyContainer
+     * @var \Wiki\Container
      */
     protected $container;
     
     protected function makeContainer()
     {
-        return new DependencyContainer(
+        Container::setInstance(new Container(
             new Wiki(new Db(__DIR__.'/db')),
             
             new Request($_POST, $_GET),
             
-            new Renderer(__DIR__.'/../resources/views'),
+            new TemplateEngine(__DIR__.'/../resources/views'),
             
             new Responder,
             
@@ -44,7 +44,7 @@ class WikiTestCase extends BaseTestCase
             new Controller,
             
             new Logger('WikiLogger')
-        );
+        ));
     }
     
     protected function setUp()

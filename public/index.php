@@ -2,4 +2,4 @@
 
 require '../vendor/autoload.php';
 
-require 'run.php';
+require 'wiki.php';

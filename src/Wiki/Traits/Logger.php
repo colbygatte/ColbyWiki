@@ -2,7 +2,7 @@
 
 namespace Wiki\Traits;
 
-use Wiki\DependencyContainer;
+use Wiki\Container;
 
 trait Logger
 {
@@ -24,7 +24,7 @@ trait Logger
     {
         if (isset($this->logger)) {
             $this->logger->log($level, $message, $context);
-        } elseif (isset($this->container) && $this->container instanceof DependencyContainer) {
+        } elseif (isset($this->container) && $this->container instanceof Container) {
             $this->container->log($level, $message, $context);
         } else {
             error_log($message);

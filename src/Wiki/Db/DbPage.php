@@ -55,9 +55,10 @@ class DbPage
             touch($path);
         }
         
-        $fh = fopen($path, 'w');
-        
-        fwrite($fh, "$time");
+        fwrite(
+            fopen($path, 'w'),
+            $time
+        );
     }
     
     /**

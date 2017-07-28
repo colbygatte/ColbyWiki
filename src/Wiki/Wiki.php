@@ -32,7 +32,12 @@ class Wiki
      */
     public function getPage($page)
     {
-        return new WikiPage($this->db->getPageDirectory(wiki_name($page)));
+        $pageName = wiki_name($page);
+        
+        return new WikiPage(
+            $this->db->getPageDirectory($pageName),
+            $pageName
+        );
     }
     
     /**

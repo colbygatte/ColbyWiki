@@ -7,9 +7,11 @@ use Wiki\Interfaces\AbstractController;
 use Wiki\Responses\ResponseFactory;
 use Wiki\Traits\Logger;
 
-class DependencyContainer
+class Container
 {
     use Logger;
+    
+    protected static $instance;
     
     /**
      * @var \Wiki\Wiki
@@ -22,7 +24,7 @@ class DependencyContainer
     protected $request;
     
     /**
-     * @var \Wiki\Renderer
+     * @var \Wiki\TemplateEngine
      */
     protected $renderer;
     
@@ -42,7 +44,7 @@ class DependencyContainer
     protected $tokenStyler;
     
     /**
-     * @var \Wiki\DependencyContainer
+     * @var \Wiki\Container
      */
     protected $actionHandler;
     
@@ -56,7 +58,7 @@ class DependencyContainer
      *
      * @param \Wiki\Wiki $wiki
      * @param \Wiki\Request $request
-     * @param \Wiki\Renderer $renderer
+     * @param \Wiki\TemplateEngine $templateEngine
      * @param \Wiki\Responder $responder
      * @param \Wiki\Responses\ResponseFactory $responseFactory
      * @param \Wiki\Parser $parser
@@ -67,7 +69,7 @@ class DependencyContainer
     public function __construct(
         Wiki $wiki,
         Request $request,
-        Renderer $renderer,
+        TemplateEngine $templateEngine,
         Responder $responder,
         ResponseFactory $responseFactory,
         Parser $parser,
@@ -77,7 +79,7 @@ class DependencyContainer
     ) {
         $this->wiki = $wiki;
         $this->request = $request;
-        $this->renderer = $renderer;
+        $this->renderer = $templateEngine;
         $this->responder = $responder;
         $this->parser = $parser;
         $this->tokenStyler = $tokenStyler;
@@ -132,6 +134,11 @@ class DependencyContainer
         $this->parseCurrentRequest();
     }
     
+    /**
+     * 1) See if there is a trigger
+     * 2) Trigger will return a reponse
+     * 3) Send response
+     */
     public function parseCurrentRequest()
     {
         // If 'action' is post, data will only be read from 'post'
@@ -139,9 +146,11 @@ class DependencyContainer
             die('"post" method action handling not implemented');
         }
         
-        $action = $this->request->post('action') ?: 'home';
-        
-        if (! $this->actionHandler->trigger($action, $this)) {
+        $action = $this->request->get('action') ?: 'home';
+    
+        if ($response = $this->actionHandler->trigger($action, $this)) {
+            $this->getResponder()->send($response);
+        } else {
             die('404 not implemented');
         }
     }
@@ -155,7 +164,7 @@ class DependencyContainer
     }
     
     /**
-     * @return \Wiki\Renderer
+     * @return \Wiki\TemplateEngine
      */
     public function getRenderer()
     {
@@ -176,5 +185,19 @@ class DependencyContainer
     public function getResponseFactory()
     {
         return $this->responseFactory;
+    }
+    
+    public static function setInstance(Container $instance)
+    {
+        static::$instance = $instance;
+    }
+    
+    public static function getInstance()
+    {
+        if (! static::$instance) {
+            throw new \Exception('Instance not set');
+        }
+    
+        return static::$instance;
     }
 }

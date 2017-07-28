@@ -2,29 +2,28 @@
 
 namespace Wiki\Interfaces;
 
-use Wiki\DependencyContainer;
+use ColbyGatte\Utilities\StaticStr;
+use http\Env\Response;
+use Wiki\Container;
 
 abstract class AbstractController
 {
-    const ACTION_SUCCESS = 'success';
-    
-    const ACTION_NOT_FOUND = 'action_not_found';
-    
     /**
      * @param $action
-     * @param \Wiki\DependencyContainer $container
      *
-     * @return string ACTION_ code
+     * @return \Wiki\Interfaces\ResponseInterface
      */
-    public function trigger($action, DependencyContainer $container)
+    public function trigger($action)
     {
-        if (method_exists($this, $method = 'action'.ucfirst($action))) {
-            if (($body = $this->$method($container)) !== false) {
-                $container->getResponder()->send(
-                    $container->getResponseFactory()->basicResponse()->setBody($body)
-                );
+        $method = 'action'.StaticStr::upperCamelize($action);
+        
+        if (method_exists($this, $method)) {
+            if (($body = $this->$method()) !== false) {
+                if ($body instanceof ResponseInterface) {
+                    return $body;
+                }
                 
-                return true;
+                return app()->getResponseFactory()->basicResponse()->setBody($body);
             } else {
                 die('error retrieving body from controller');
             }
@@ -33,5 +32,5 @@ abstract class AbstractController
         die('error handling/error page not implemented');
     }
     
-    abstract function actionHome(DependencyContainer $container);
+    abstract function actionHome();
 }
